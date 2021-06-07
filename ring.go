@@ -26,7 +26,7 @@ func NewRingWithSize(size int) *Ring {
 		list: make([]interface{}, size),
 		top:  0,
 		bot:  0,
-		len:  size,
+		len:  0,
 	}
 }
 
@@ -138,21 +138,20 @@ func (r *Ring) CloneTo(op RingOp) {
 
 // grows the size of slice which does not allow shrinking
 func (r *Ring) grow(size int) bool {
-	if r.Cap() < size {
+	if r.Cap() >= size {
 		return false
 	}
 	// generate slice
 	next := make([]interface{}, size)
 
 	// copy
-	if r.len == 0 {
-		r.list = next
-	} else if r.bot < r.top {
+	if r.bot <= r.top && r.len != 0 {
 		copy(next, r.list[r.top:])
 		copy(next[r.len-r.top:], r.list[:r.bot])
-	} else {
+	} else if r.bot > r.top {
 		copy(next, r.list[r.top:r.bot])
 	}
+	r.list = next
 	r.top = 0
 	r.bot = r.len
 	return true
