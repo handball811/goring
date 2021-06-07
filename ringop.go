@@ -1,6 +1,6 @@
 package goring
 
-// TODO: Add Not Sync -> then Sync
+// TODO: Add Sync Ring
 // interface of ring
 type RingOp interface {
 	// Capacity of this ring
