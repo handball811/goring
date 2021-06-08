@@ -1,7 +1,5 @@
 package goring
 
-// TODO: Add Unit Test
-
 var (
 	RingDefaultSize = 8
 )

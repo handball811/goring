@@ -2,3 +2,4 @@
 
 - Ring Slice
 - Low Allocation
+- Queue
