@@ -14,7 +14,7 @@ type RingOp interface {
 	PopSlice(s []interface{}) int
 
 	At(i int) (interface{}, bool)
-	Range(func(i int, t interface{}) bool)
+	Range(c func(i int, t interface{}) bool)
 	SetCap(c int) bool
 	Clean()
 

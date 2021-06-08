@@ -104,7 +104,7 @@ func (r *Ring) PopSlice(s []interface{}) int {
 }
 
 func (r *Ring) At(i int) (interface{}, bool) {
-	if i > r.len {
+	if i >= r.len || i < 0 {
 		return nil, false
 	}
 	return r.list[(r.top+i)%r.Cap()], true
@@ -113,10 +113,9 @@ func (r *Ring) At(i int) (interface{}, bool) {
 func (r *Ring) Range(c func(i int, t interface{}) bool) {
 	top := r.top
 	for i := 0; i < r.len; i++ {
-		if !c(i, r.list[top]) {
+		if !c(i, r.list[(top+i)%r.Cap()]) {
 			return
 		}
-		top = (top + i) % r.Cap()
 	}
 	return
 }
@@ -133,7 +132,13 @@ func (r *Ring) Clean() {
 
 func (r *Ring) CloneTo(op RingOp) {
 	op.Clean()
-	op.PushSlice(r.list)
+	// copy
+	if r.bot <= r.top && r.len != 0 {
+		op.PushSlice(r.list[r.top:])
+		op.PushSlice(r.list[:r.bot])
+	} else if r.bot > r.top {
+		op.PushSlice(r.list[r.top:r.bot])
+	}
 }
 
 // grows the size of slice which does not allow shrinking
