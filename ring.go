@@ -109,7 +109,13 @@ func (r *Ring) At(i int) (interface{}, bool) {
 }
 
 func (r *Ring) Range(c func(i int, t interface{}) bool) {
-	for i := 0; i < r.len && c(i, r.list[(r.top+i)%r.Cap()]); i++ {
+	t := r.top
+	cap := r.Cap()
+	for i := 0; i < r.len && c(i, r.list[t]); i++ {
+		t++
+		if t >= cap {
+			t -= cap
+		}
 	}
 	return
 }

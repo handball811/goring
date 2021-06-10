@@ -295,3 +295,20 @@ func BenchmarkRange128(b *testing.B) {
 		})
 	}
 }
+
+func BenchmarkRange128Normal(b *testing.B) {
+
+	target := NewRing()
+	target.PushSlice(make([]interface{}, 128))
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		for i := 0; i < 128; i++ {
+			if !func() bool {
+				return true
+			}() {
+				break
+			}
+		}
+	}
+}
