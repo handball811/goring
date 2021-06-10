@@ -282,3 +282,16 @@ func BenchmarkPushAndPop(b *testing.B) {
 		target.Pop()
 	}
 }
+
+func BenchmarkRange128(b *testing.B) {
+
+	target := NewRing()
+	target.PushSlice(make([]interface{}, 128))
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		target.Range(func(i int, t interface{}) bool {
+			return true
+		})
+	}
+}
